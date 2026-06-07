@@ -21,3 +21,35 @@ services:
 
     volumes:
       - ./data:/tmp/kraft-combined-logs
+
+
+
+  kafka-init:
+    image: apache/kafka:latest
+    container_name: kafka-init
+    depends_on:
+      - kafka
+    network_mode: "service:kafka"
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        echo "Waiting for Kafka..."
+        sleep 15
+
+        echo "Creating topic: witsml-drilling-data"
+
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server localhost:9092 \
+          --create \
+          --if-not-exists \
+          --topic witsml-drilling-data \
+          --partitions 1 \
+          --replication-factor 1
+
+        echo "Topic creation finished."
+
+        echo "Current topics:"
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server localhost:9092 \
+          --list
