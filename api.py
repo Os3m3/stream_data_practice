@@ -64,4 +64,4 @@ def home():
 
 @app.get("/well/current")
 def get_current_data():
-    return drilling_data
+    return drilling_data.copy()
