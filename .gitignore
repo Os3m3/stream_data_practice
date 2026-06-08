@@ -9,3 +9,5 @@ wheels/
 # Virtual environments
 .venv
 features.txt
+app.log
+data/
