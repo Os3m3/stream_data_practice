@@ -39,7 +39,7 @@ while True:
             print(row)
             value = json.dumps(row).encode("utf-8")
             producer.produce(
-                topic="drill-data",
+                topic="raw-drill-data",
                 value=value,
                 callback=deliery_report
             )
