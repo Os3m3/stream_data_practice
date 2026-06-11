@@ -11,3 +11,4 @@ wheels/
 features.txt
 app.log
 data/
+.env

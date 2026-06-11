@@ -10,8 +10,8 @@ app = FastAPI()
 # -----------------------------
 # WITSML-style metadata
 # -----------------------------
-WELL_UID = "PDO-WELL-001"
-WELLBORE_UID = "PDO-WELLBORE-001"
+WELL_UID = "WELL-001"
+WELLBORE_UID = "WELLBORE-001"
 LOG_UID = "REALTIME-DRILLING-LOG"
 RIG_ID = "RIG-001"
 

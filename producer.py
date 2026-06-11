@@ -1,15 +1,29 @@
 from confluent_kafka import Producer
+from confluent_kafka.schema_registry import SchemaRegistryClient
+from confluent_kafka.schema_registry.json_schema import JSONSerializer
+from confluent_kafka.serialization import SerializationContext, MessageField
+from schema import DRILLING_LOG_SCHEMA
 import requests
 from logger import log
 import time
-import json
 
 producer_config = {
     'bootstrap.servers':'localhost:9092'
     }
 
-producer = Producer(producer_config)
+# Connecting to Schema Registry docker image
+schema_registry_client = SchemaRegistryClient ({
+    "url": "http://localhost:8081"
+})
 
+
+# Before sending the data to the Kafka, first convert the python data into JSON byte,validate it using the schema, and register/use that schema in Schema Registry.
+json_serializer = JSONSerializer(
+    schema_str=DRILLING_LOG_SCHEMA,
+    schema_registry_client=schema_registry_client
+)
+
+producer = Producer(producer_config)
 
 api_url =  "http://localhost:8000/witsml/logs"
 
@@ -37,10 +51,12 @@ while True:
         rows = data["rows"]
         for row in rows:
             print(row)
-            value = json.dumps(row).encode("utf-8")
             producer.produce(
                 topic="raw-drill-data",
-                value=value,
+                value=json_serializer(
+                    row,
+                    SerializationContext("raw-drill-data", MessageField.VALUE)
+                ),
                 callback=deliery_report
             )
             producer.flush()
