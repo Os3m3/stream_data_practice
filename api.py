@@ -56,14 +56,29 @@ def generate_data():
             # Increase depth continuously
             drilling_data["measured_depth_m"] += random.uniform(0.1, 0.5)
 
-            # Random fluctuations
-            drilling_data["rop_m_per_hr"] = round(random.uniform(10, 25), 2)
-            drilling_data["wob_klbf"] = round(random.uniform(20, 40), 2)
-            drilling_data["rpm"] = random.randint(100, 140)
-            drilling_data["torque_ftlb"] = random.randint(20000, 30000)
-            drilling_data["standpipe_pressure_psi"] = random.randint(2500, 3500)
-            drilling_data["mud_flow_lpm"] = random.randint(3000, 3500)
-            drilling_data["hookload_klbf"] = random.randint(180, 240)
+# Mostly good data, sometimes bad for testing the bad topic
+            is_bad = random.random() < 0.15  # 15% bad, 85% clean
+
+            if is_bad:
+                drilling_data["rop_m_per_hr"] = round(random.uniform(-5, 25), 2)
+                drilling_data["wob_klbf"] = round(random.uniform(-10, 40), 2)
+                drilling_data["rpm"] = random.choice([
+                    random.randint(301, 500),
+                    random.randint(-50, -1)
+                ])
+                drilling_data["torque_ftlb"] = random.randint(-1000, 30000)
+                drilling_data["standpipe_pressure_psi"] = random.randint(-500, 3500)
+                drilling_data["mud_flow_lpm"] = random.randint(-100, 3500)
+                drilling_data["hookload_klbf"] = random.randint(-50, 240)
+
+            else:
+                drilling_data["rop_m_per_hr"] = round(random.uniform(10, 25), 2)
+                drilling_data["wob_klbf"] = round(random.uniform(20, 40), 2)
+                drilling_data["rpm"] = random.randint(100, 140)
+                drilling_data["torque_ftlb"] = random.randint(20000, 30000)
+                drilling_data["standpipe_pressure_psi"] = random.randint(2500, 3500)
+                drilling_data["mud_flow_lpm"] = random.randint(3000, 3500)
+                drilling_data["hookload_klbf"] = random.randint(180, 240)
 
             # Timestamp in UTC
             timestamp = datetime.now(timezone.utc).isoformat()
