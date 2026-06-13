@@ -34,7 +34,7 @@ log.info(f"Kafka bootstrap server: {producer_config['bootstrap.servers']}")
 log.info(f"API URL: {api_url}")
 
 
-# -- Deliver report:
+# Deliver report:
 def deliery_report(err, msg):
     if err:
         log.error(f"❌ Delivery Faild: {err}")
